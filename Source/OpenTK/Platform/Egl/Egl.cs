@@ -134,6 +134,7 @@ namespace OpenTK.Platform.Egl
         public const int RENDERABLE_TYPE = 12352;
         public const int MATCH_NATIVE_PIXMAP = 12353;
         public const int CONFORMANT = 12354;
+        public const int FULLSCREEN_ANGLE = 12367;
         public const int SLOW_CONFIG = 12368;
         public const int NON_CONFORMANT_CONFIG = 12369;
         public const int TRANSPARENT_RGB = 12370;

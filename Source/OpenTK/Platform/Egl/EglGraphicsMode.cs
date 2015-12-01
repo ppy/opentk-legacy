@@ -35,30 +35,30 @@ namespace OpenTK.Platform.Egl
     class EglGraphicsMode
     {
         public GraphicsMode SelectGraphicsMode(EglWindowInfo window,
-            GraphicsMode mode, RenderableFlags flags)
+            GraphicsMode mode, RenderableFlags flags, bool fullscreen)
         {
             return SelectGraphicsMode(window,
                 mode.ColorFormat, mode.Depth, mode.Stencil,
                 mode.Samples, mode.AccumulatorFormat, mode.Buffers, mode.Stereo,
-                flags);
+                flags, fullscreen);
         }
 
         public GraphicsMode SelectGraphicsMode(EglWindowInfo window,
             ColorFormat color, int depth, int stencil,
             int samples, ColorFormat accum, int buffers, bool stereo,
-            RenderableFlags renderable_flags)
+            RenderableFlags renderable_flags, bool fullscreen)
         {
             return SelectGraphicsMode(
                 SurfaceType.WINDOW_BIT, 
                 window.Display,
-                color, depth, stencil, samples, accum, buffers, stereo, renderable_flags
-                );
+                color, depth, stencil, samples, accum, buffers, stereo, renderable_flags,
+                fullscreen);
         }
 
         public GraphicsMode SelectGraphicsMode(SurfaceType surface_type, 
             IntPtr display, ColorFormat color, int depth, int stencil,
             int samples, ColorFormat accum, int buffers, bool stereo,
-            RenderableFlags renderable_flags)
+            RenderableFlags renderable_flags, bool fullscreen)
         {
             IntPtr[] configs = new IntPtr[1];
             int[] attribList = new int[] 
@@ -77,6 +77,8 @@ namespace OpenTK.Platform.Egl
                 Egl.SAMPLE_BUFFERS, samples > 0 ? 1 : 0,
                 Egl.SAMPLES, samples > 0 ? samples : 0,
 
+                Egl.FULLSCREEN_ANGLE, fullscreen ? Egl.TRUE : Egl.FALSE,
+
                 Egl.NONE,
             };
 
@@ -89,7 +91,7 @@ namespace OpenTK.Platform.Egl
             if (num_configs == 0)
             {
                 if (depth > 0)
-                    return SelectGraphicsMode(surface_type, display, color, 0, stencil, samples, accum, buffers, stereo, renderable_flags);
+                    return SelectGraphicsMode(surface_type, display, color, 0, stencil, samples, accum, buffers, stereo, renderable_flags, fullscreen);
 
                 throw new GraphicsModeException(String.Format("Failed to retrieve GraphicsMode, no fitting configurations, error {0}", Egl.GetError()));
             }
