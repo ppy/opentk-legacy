@@ -42,6 +42,11 @@ namespace OpenTK.Input
             Platform.Factory.Default.CreateKeyboardDriver();
         static readonly object SyncRoot = new object();
 
+        /// <summary>
+        /// Should keyboard input be handled?
+        /// </summary>
+        public static bool Enabled = false;
+
         #endregion
 
         #region Public Members
