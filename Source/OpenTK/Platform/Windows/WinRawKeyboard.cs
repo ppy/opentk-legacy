@@ -155,6 +155,9 @@ namespace OpenTK.Platform.Windows
 
         public bool ProcessKeyboardEvent(IntPtr raw)
         {
+            if (!Keyboard.Enabled)
+                return false;
+
             bool processed = false;
 
             RawInput rin;

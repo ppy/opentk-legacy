@@ -46,6 +46,11 @@ namespace OpenTK.Input
         static readonly IJoystickDriver2 implementation =
             Platform.Factory.Default.CreateJoystickDriver();
 
+        /// <summary>
+        /// Should joystick input be handled?
+        /// </summary>
+        public static bool Enabled = false;
+
         private Joystick() { }
 
         /// <summary>
