@@ -101,15 +101,15 @@ namespace OpenTK.Platform.Windows
                             {
                                 switch (header.Type)
                                 {
-                                    case RawInputDeviceType.KEYBOARD:
-                                        if (((WinRawKeyboard)KeyboardDriver).ProcessKeyboardEvent(lParam))
-                                            return IntPtr.Zero;
-                                        break;
+                                    //case RawInputDeviceType.KEYBOARD:
+                                    //    if (((WinRawKeyboard)KeyboardDriver).ProcessKeyboardEvent(lParam))
+                                    //        return IntPtr.Zero;
+                                    //    break;
 
-                                    case RawInputDeviceType.MOUSE:
-                                        if (((WinRawMouse)MouseDriver).ProcessMouseEvent(lParam))
-                                            return IntPtr.Zero;
-                                        break;
+                                    //case RawInputDeviceType.MOUSE:
+                                    //    if (((WinRawMouse)MouseDriver).ProcessMouseEvent(lParam))
+                                    //        return IntPtr.Zero;
+                                    //    break;
 
                                     case RawInputDeviceType.HID:
                                         if (((WinRawJoystick)JoystickDriver).ProcessEvent(lParam))
@@ -121,8 +121,8 @@ namespace OpenTK.Platform.Windows
                         break;
 
                     case WindowMessage.DEVICECHANGE:
-                        ((WinRawKeyboard)KeyboardDriver).RefreshDevices();
-                        ((WinRawMouse)MouseDriver).RefreshDevices();
+                        //((WinRawKeyboard)KeyboardDriver).RefreshDevices();
+                        //((WinRawMouse)MouseDriver).RefreshDevices();
                         ((WinRawJoystick)JoystickDriver).RefreshDevices();
                         break;
                 }
