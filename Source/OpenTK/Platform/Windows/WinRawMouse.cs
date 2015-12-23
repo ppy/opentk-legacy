@@ -151,9 +151,6 @@ namespace OpenTK.Platform.Windows
 
         public bool ProcessMouseEvent(IntPtr raw_buffer)
         {
-            if (!Mouse.Enabled)
-                return false;
-
             bool processed = false;
 
             RawInput rin;

@@ -289,9 +289,6 @@ namespace OpenTK.Platform.Windows
 
         public unsafe bool ProcessEvent(IntPtr raw)
         {
-            if (!Joystick.Enabled)
-                return false;
-
             // Query the size of the raw HID data buffer
             int size = 0;
             Functions.GetRawInputData(raw, GetRawInputDataEnum.INPUT, IntPtr.Zero, ref size, RawInputHeader.SizeInBytes);
