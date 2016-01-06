@@ -82,7 +82,8 @@ namespace OpenTK.Platform.Windows
             public void SetAxis(short collection, HIDPage page, short usage, short value)
             {
                 JoystickAxis axis = GetAxis(collection, page, usage);
-                State.SetAxis(axis, value);
+                if (axis != JoystickAxis.Last)
+                    State.SetAxis(axis, value);
             }
 
             public void SetButton(short collection, HIDPage page, short usage, bool value)
@@ -143,6 +144,8 @@ namespace OpenTK.Platform.Windows
                 if (!axes.ContainsKey(key))
                 {
                     JoystickAxis axis = HidHelper.TranslateJoystickAxis(page, usage);
+                    if (axis == JoystickAxis.Last)
+                        return axis;
                     axes.Add(key, axis);
                 }
                 return axes[key];
@@ -289,9 +292,6 @@ namespace OpenTK.Platform.Windows
 
         public unsafe bool ProcessEvent(IntPtr raw)
         {
-            if (!Joystick.Enabled)
-                return false;
-
             // Query the size of the raw HID data buffer
             int size = 0;
             Functions.GetRawInputData(raw, GetRawInputDataEnum.INPUT, IntPtr.Zero, ref size, RawInputHeader.SizeInBytes);
@@ -352,10 +352,15 @@ namespace OpenTK.Platform.Windows
 
         HatPosition GetHatPosition(uint value, HidProtocolValueCaps caps)
         {
-            if (caps.LogicalMax == 8)
-                return (HatPosition)value;
-            else
-                return HatPosition.Centered;
+            switch (caps.LogicalMax)
+            {
+                case 8:
+                    return (HatPosition)value;
+                case 7:
+                    return (HatPosition)((value + 1) % 9);
+                default:
+                    return HatPosition.Centered;
+            }
         }
 
         unsafe void UpdateAxes(RawInput* rin, Device stick)

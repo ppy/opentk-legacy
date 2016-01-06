@@ -58,7 +58,7 @@ namespace OpenTK.Platform.Windows
                 throw new ArgumentNullException("window");
 
             Window = window;
-            RefreshDevices();
+            //RefreshDevices();
 
             Debug.Unindent();
         }
@@ -151,9 +151,6 @@ namespace OpenTK.Platform.Windows
 
         public bool ProcessMouseEvent(IntPtr raw_buffer)
         {
-            if (!Mouse.Enabled)
-                return false;
-
             bool processed = false;
 
             RawInput rin;
@@ -165,7 +162,7 @@ namespace OpenTK.Platform.Windows
                 MouseState mouse;
                 if (!rawids.ContainsKey(handle))
                 {
-                    RefreshDevices();
+                    //RefreshDevices();
                 }
 
                 if (mice.Count == 0)
