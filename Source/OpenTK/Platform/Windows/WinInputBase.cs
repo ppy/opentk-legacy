@@ -38,14 +38,11 @@ namespace OpenTK.Platform.Windows
         #region Fields
 
         readonly WindowProcedure WndProc;
-        readonly Thread InputThread;
-        readonly AutoResetEvent InputReady = new AutoResetEvent(false); 
         
         IntPtr OldWndProc;
         INativeWindow native;
 
-        protected INativeWindow Native { get { return native; } private set { native = value; } }
-        protected WinWindowInfo Parent { get { return (WinWindowInfo)Native.WindowInfo; } }
+        protected WinWindowInfo Parent;
 
         static readonly IntPtr Unhandled = new IntPtr(-1);
 
@@ -55,71 +52,19 @@ namespace OpenTK.Platform.Windows
 
         public WinInputBase()
         {
-            WndProc = WindowProcedure;
+            WndProc = WndProcHandler;
 
-            InputThread = new Thread(ProcessEvents);
-            InputThread.SetApartmentState(ApartmentState.STA);
-            InputThread.IsBackground = true;
-            InputThread.Start();
-
-            InputReady.WaitOne();
-        }
-
-        #endregion
-
-        #region Private Members
-
-        #region ConstructMessageWindow
-
-        INativeWindow ConstructMessageWindow()
-        {
-            Debug.WriteLine("Initializing input driver.");
-            Debug.Indent();
-
-            // Create a new message-only window to retrieve WM_INPUT messages.
-            INativeWindow native = new NativeWindow();
-            native.ProcessEvents();
-            WinWindowInfo parent = native.WindowInfo as WinWindowInfo;
-            Functions.SetParent(parent.Handle, Constants.MESSAGE_ONLY);
-            native.ProcessEvents();
-
-            Debug.Unindent();
-            return native;
-        }
-
-
-        #endregion
-
-        #region ProcessEvents
-
-        void ProcessEvents()
-        {
-            Native = ConstructMessageWindow();
+            Parent = new WinWindowInfo(NativeWindow.OsuWindowHandle, null);
             CreateDrivers();
 
             // Subclass the window to retrieve the events we are interested in.
             OldWndProc = Functions.SetWindowLong(Parent.Handle, WndProc);
             Debug.Print("Input window attached to {0}", Parent);
-
-            InputReady.Set();
-
-            MSG msg = new MSG();
-            while (Native.Exists)
-            {
-                int ret = Functions.GetMessage(ref msg, Parent.Handle, 0, 0);
-                if (ret == -1)
-                {
-                    throw new PlatformException(String.Format(
-                        "An error happened while processing the message queue. Windows error: {0}",
-                        Marshal.GetLastWin32Error()));
-                }
-
-                Functions.TranslateMessage(ref msg);
-                Functions.DispatchMessage(ref msg);
-            }
         }
 
         #endregion
+
+        #region Private Members
 
         #region WndProcHandler
 
@@ -182,15 +127,6 @@ namespace OpenTK.Platform.Windows
         {
             if (!Disposed)
             {
-                if (manual)
-                {
-                    if (Native != null)
-                    {
-                        Native.Close();
-                        Native.Dispose();
-                    }
-                }
-
                 Disposed = true;
             }
         }
