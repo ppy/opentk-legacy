@@ -107,13 +107,6 @@ namespace OpenTK.Platform.Egl
             {
                 if (!offscreen)
                 {
-                    // Todo: Somewhere down this code path the graphics mode is being changed
-                    // (maybe destructed?) and yields a broken format. This causes
-                    // HandleAsEGLContext to fail. One possible solution around this is to re-set the mode (see below)
-                    // however this fails because the context is still broken internally in ANGLE at the time
-                    // the context is being made current
-                    // This can be further shortcut inside ANGLE's MakeCurrent(), however on entry_points_egl.cpp:619-627 however the
-                    // render target still ends up broken at render time (Renderer9.cpp:1523)
                     window.CreateWindowSurface(config);
                 }
                 else
@@ -127,15 +120,6 @@ namespace OpenTK.Platform.Egl
 
             try
             {
-                Mode = new EglGraphicsMode().SelectGraphicsMode(surface_type,
-                        window.Display, mode.ColorFormat, mode.Depth, mode.Stencil,
-                        mode.Samples, mode.AccumulatorFormat, mode.Buffers, mode.Stereo,
-                        Renderable, (flags & GraphicsContextFlags.AngleFullscreen) > 0);
-
-                if (!Mode.Index.HasValue)
-                    throw new GraphicsModeException("Invalid or unsupported GraphicsMode.");
-                config = Mode.Index.Value;
-
                 HandleAsEGLContext = Egl.CreateContext(window.Display, config, share_context, attrib_list);
 
                 GraphicsContextFlags = flags;
