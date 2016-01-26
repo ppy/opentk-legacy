@@ -58,6 +58,12 @@ namespace OpenTK
         /// System.Threading.Thread.CurrentThread.ManagedThreadId of the thread that created this <see cref="OpenTK.NativeWindow"/>.
         /// </summary>
         private int thread_id;
+
+        /// <summary>
+        /// The Osu window handle.
+        /// </summary>
+        public static IntPtr OsuWindowHandle;
+
         #endregion
 
         #region --- Contructors ---
