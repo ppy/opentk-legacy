@@ -53,7 +53,7 @@ namespace OpenTK.Platform.Windows
             Debug.Indent();
 
             this.window = windowHandle;
-            RefreshDevices();
+            //RefreshDevices();
 
             Debug.Unindent();
         }
@@ -175,7 +175,7 @@ namespace OpenTK.Platform.Windows
                 KeyboardState keyboard;
                 if (!rawids.ContainsKey(handle))
                 {
-                    RefreshDevices();
+                    //RefreshDevices();
                 }
 
                 if (keyboards.Count == 0)
