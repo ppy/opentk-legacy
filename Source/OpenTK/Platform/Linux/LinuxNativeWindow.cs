@@ -87,7 +87,7 @@ namespace OpenTK.Platform.Linux
 
             if (!mode.Index.HasValue)
             {
-                mode = new EglGraphicsMode().SelectGraphicsMode(window, mode, 0);
+                mode = new EglGraphicsMode().SelectGraphicsMode(window, mode, 0, false);
             }
             Debug.Print("[KMS] Selected EGL mode {0}", mode);
 

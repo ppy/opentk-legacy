@@ -81,5 +81,10 @@ namespace OpenTK.Graphics
         /// and uses OpenGL as rendering backend.
         /// </summary>
         AngleOpenGL = 0x0080,
+        /// <summary>
+        /// Indicates that this GrahpicsContext is targeting OpenGL|ES via Angle
+        /// and a fullscreen Direct3D context.
+        /// </summary>
+        AngleFullscreen = 0x0100,
     }
 }
